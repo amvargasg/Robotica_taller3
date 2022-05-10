@@ -39,7 +39,7 @@ class PubSub(object):
          
     def visualizar(self, msg):
         coord = self.transformar_Img(msg)
-        #print('El centro esta en '+ str(coord))
+        print('EL centro esta en '+ str(coord))
         self.target_pub.publish(str(coord))
 
 
@@ -52,6 +52,7 @@ class PubSub(object):
         # ret: booleano que indica si está leyendo del marco (osea dentro de la imagen)
         # frame: matriz tridimencional con la info del cuadro (el color del pixel)
         ret,frame = self.cap.read()
+        
         if ret == True:
             # Transformar al espacio de color de RGB a HSV
             frameHSV = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
@@ -71,6 +72,14 @@ class PubSub(object):
                 self.coordenadas = self.dibujar(maskAmarillo,(0,255,255), frame)
             elif color == 'r':
                 self.coordenadas = self.dibujar(maskRed,(0,0,255),frame)
+            
+            # Mostrar la imagen en una ventana
+            cv2.imshow('frame',frame)
+            # the 'q' button is set as the
+            # quitting button you may use any
+            # desired button of your choice
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                ret == False
                 
             return self.coordenadas
             
